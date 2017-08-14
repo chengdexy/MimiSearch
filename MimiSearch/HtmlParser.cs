@@ -1,5 +1,8 @@
-﻿using System;
+﻿using HtmlAgilityPack;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace MimiSearch
 {
@@ -37,6 +40,23 @@ namespace MimiSearch
             // find all image-urls in html
             List<string> list = new List<string>();
             // ...
+            if (!html.Contains("www.ded22.com"))
+            {
+                var htmlDoc = new HtmlDocument();
+                htmlDoc.LoadHtml(html);
+                var divNode = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='t_msgfont']");
+                var imgNodes = divNode.SelectNodes("img | font/img | font/font/img");
+                foreach (var node in imgNodes)
+                {
+                    string text = node.GetAttributeValue("src", "");
+                    if (text.Contains("%"))
+                    {
+                        text = text.Split('%')[0];
+                    }
+                    string url = text;
+                    list.Add(url);
+                }
+            }
             return list;
         }
 
@@ -45,6 +65,18 @@ namespace MimiSearch
             // find all item-urls in html
             List<string> list = new List<string>();
             // ...
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(html);
+            var nodes = htmlDoc.DocumentNode.SelectNodes("//td[@class='f_title']/div[@class='right']");
+            foreach (var node in nodes)
+            {
+                if (node.SelectSingleNode("img[@alt='本版置顶']") == null)
+                {
+                    string text = node.SelectSingleNode("../a").GetAttributeValue("href", "");
+                    string url = "http://www.mimihhh.com/" + Regex.Match(text, @"viewthread\.php\?tid=\d{1,7}").Value;
+                    list.Add(url);
+                }
+            }
             return list;
 
         }
@@ -54,6 +86,16 @@ namespace MimiSearch
             // find all page-urls in html
             List<string> list = new List<string>();
             // ...
+            var htmlDoc = new HtmlDocument();
+            htmlDoc.LoadHtml(html);
+            var urls = htmlDoc.DocumentNode.SelectNodes("//a[@class='p_num']").Select(p => p.GetAttributeValue("href", ""));
+            foreach (var url in urls)
+            {
+                if (!string.IsNullOrEmpty(url))
+                {
+                    list.Add(@"http://www.mimihhh.com/" + url);
+                }
+            }
             return list;
         }
     }

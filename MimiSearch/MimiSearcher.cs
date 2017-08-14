@@ -5,10 +5,15 @@ namespace MimiSearch
 {
     internal class MimiSearcher
     {
+        // the root url
         public string SearchRoot { get; set; }
+        // url manager
         public UrlManager UrlManager { get; set; }
+        // downloader for downloading html code or image files
         public HtmlDownloader HtmlDownloader { get; set; }
+        // html code parser
         public HtmlParser HtmlParser { get; set; }
+        // outputer
         public HtmlOutputer HtmlOutputer { get; set; }
 
         public enum UrlType
@@ -25,12 +30,13 @@ namespace MimiSearch
             HtmlDownloader = new HtmlDownloader();
             HtmlParser = new HtmlParser();
             HtmlOutputer = new HtmlOutputer();
+
+            // add root-url into url-manager
+            UrlManager.Add(SearchRoot, UrlType.Page);
         }
 
         public void Craw()
         {
-            // add root-url into url-manager
-            UrlManager.Add(SearchRoot, UrlType.Page);
             // get all page-urls for craw
             GetAll(UrlType.Page);
             // get all item-urls in such pages
@@ -38,6 +44,7 @@ namespace MimiSearch
             // get all image-urls in such items
             GetAll(UrlType.Image);
         }
+
 
         private void GetAll(UrlType type)
         {

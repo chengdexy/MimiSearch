@@ -8,22 +8,22 @@ namespace MimiSearch
 {
     internal class HtmlDownloader
     {
-        private WebClient _wc = new WebClient();
+        private WebClient _wc;
 
         public HtmlDownloader()
         {
+            _wc = new WebClient();
         }
 
         internal string DownloadHtml(string url)
         {
-            Encoding enc = Encoding.GetEncoding("utf-8");
+            Encoding enc = Encoding.GetEncoding("gb2312");
             _wc.Encoding = enc;
             return _wc.DownloadString(url);
         }
 
         internal void DownloadImage(string url)
         {
-            // TODO: check for if need '\' between the path and file name
             try
             {
                 _wc.DownloadFile(url, AppDomain.CurrentDomain.BaseDirectory + Path.GetFileName(url));
