@@ -72,9 +72,14 @@ namespace MimiSearch
             {
                 if (node.SelectSingleNode("img[@alt='本版置顶']") == null)
                 {
-                    string text = node.SelectSingleNode("../a").GetAttributeValue("href", "");
-                    string url = "http://www.mimihhh.com/" + Regex.Match(text, @"viewthread\.php\?tid=\d{1,7}").Value;
-                    list.Add(url);
+                    // TODO: save urls with there titles after filte by white names
+                    string title = node.SelectSingleNode("../a").InnerText;
+                    if (title.Contains("黑白中文") || title.Contains("彩漫中文"))
+                    {
+                        string text = node.SelectSingleNode("../a").GetAttributeValue("href", "");
+                        string url = "http://www.mimihhh.com/" + Regex.Match(text, @"viewthread\.php\?tid=\d{1,7}").Value;
+                        list.Add(url);
+                    }
                 }
             }
             return list;
