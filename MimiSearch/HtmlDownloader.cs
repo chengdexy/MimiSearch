@@ -26,7 +26,13 @@ namespace MimiSearch
         {
             try
             {
-                _wc.DownloadFile(url, AppDomain.CurrentDomain.BaseDirectory +"imgs\\"+ Path.GetFileName(url));
+                string path = AppDomain.CurrentDomain.BaseDirectory + "imgs\\";
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+                _wc.DownloadFile(url, path + Path.GetFileName(url));
             }
             catch (Exception e)
             {
