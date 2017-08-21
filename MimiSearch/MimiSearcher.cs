@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 
 namespace MimiSearch
 {
@@ -58,7 +59,13 @@ namespace MimiSearch
                     urls.AddRange(UrlManager.GetAll(UrlType.Page));
                     break;
                 case UrlType.Image:
-                    urls.AddRange(UrlManager.GetAll(UrlType.Item));
+                    string[] tmpUrls = UrlManager.GetAll(UrlType.Item);
+                    tmpUrls = ClearExsitItems(tmpUrls);
+                    if (tmpUrls.Length == 0)
+                    {
+                        PassOutputAndStopRunning();
+                    }
+                    urls.AddRange(tmpUrls);
                     break;
             }
             foreach (string url in urls)
@@ -69,16 +76,52 @@ namespace MimiSearch
             }
         }
 
+        private void PassOutputAndStopRunning()
+        {
+            Console.WriteLine("没有找到新的图片项目,程序即将退出");
+            Console.ReadKey();
+            Environment.Exit(0);
+        }
+
+        private string[] ClearExsitItems(string[] tmpUrls)
+        {
+            SqlConnection cnn = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=MimiSearcher;User ID=sa;Password=darkmoon1");
+            cnn.Open();
+            SqlCommand cmd = new SqlCommand();
+            cmd.Connection = cnn;
+            List<string> tmpList = new List<string>(tmpUrls);
+            List<string> tmpList2 = new List<string>(tmpUrls);
+            foreach (var url in tmpList2)
+            {
+                string sqlStr = $"select count(*) from Old_Item_Url where item_url='{url}'";
+                cmd.CommandText = sqlStr;
+                if ((int)cmd.ExecuteScalar() > 0)
+                {
+                    tmpList.Remove(url);
+                }
+            }
+            cnn.Close();
+            return tmpList.ToArray();
+        }
+
         internal void Output()
         {
-            // create .csv file to out-put image-detail list
             HtmlOutputer = new HtmlOutputer();
-            HtmlOutputer.CreateCSV(UrlManager.GetAll(UrlType.Image));
-            // download images to local
-            foreach (string url in UrlManager.GetAll(UrlType.Image))
-            {
-                HtmlDownloader.DownloadImage(url);
-            }
+            // save all item-urls into database
+            HtmlOutputer.SaveItemUrls(UrlManager.GetAll(UrlType.Item));
+            // build a html file with these image-urls
+            HtmlOutputer.OutputHtml(UrlManager.GetAll(UrlType.Image));
+
+
+
+            // since 2017-8-21 i dont need download any image,
+            // instead build a html with these urls to send email
+
+            //// download images to local
+            //foreach (string url in UrlManager.GetAll(UrlType.Image))
+            //{
+            //    HtmlDownloader.DownloadImage(url);
+            //}
         }
     }
 }

@@ -36,7 +36,7 @@ namespace MimiSearch
             }
             catch (Exception e)
             {
-                Debug.Print(e.Source + ": " + e.Message);
+                Debug.Print("[Error]"+e.Source + ": " + e.Message);
             }
         }
     }
