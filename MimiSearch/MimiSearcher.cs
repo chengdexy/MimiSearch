@@ -78,8 +78,6 @@ namespace MimiSearch
 
         private void PassOutputAndStopRunning()
         {
-            Console.WriteLine("没有找到新的图片项目,程序即将退出");
-            Console.ReadKey();
             Environment.Exit(0);
         }
 
@@ -113,11 +111,11 @@ namespace MimiSearch
             HtmlOutputer.OutputHtml(UrlManager.GetAll(UrlType.Image));
 
 
-
+            //
             // since 2017-8-21 i dont need download any image,
             // instead build a html with these urls to send email
-
-            //// download images to local
+            //
+            //
             //foreach (string url in UrlManager.GetAll(UrlType.Image))
             //{
             //    HtmlDownloader.DownloadImage(url);

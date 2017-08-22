@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.IO;
+using System.Net.Mail;
 using System.Text;
 
 namespace MimiSearch
@@ -50,16 +51,25 @@ namespace MimiSearch
             foreach (var url in urlList)
             {
                 sb.Append($"<img src=\"{url}\" />");
-                sb.Append("<br />");
+                sb.Append("<hr />");
             }
             sb.Append("</body>");
             sb.Append("</html>");
 
-            FileStream fs = new FileStream(AppDomain.CurrentDomain.BaseDirectory + "result.html", FileMode.OpenOrCreate);
-            StreamWriter sw = new StreamWriter(fs);
-            sw.Write(sb.ToString());
-            sw.Close();
-            fs.Close();
+            MailSender ms = new MailSender
+            {
+                SendTo="hi@chengdexy.cn",
+                IsHtml=true,
+                BodyHtml = sb.ToString()
+            };
+            try
+            {
+                ms.Send();
+            }
+            catch (SmtpException)
+            {
+                throw;
+            }
         }
     }
 }

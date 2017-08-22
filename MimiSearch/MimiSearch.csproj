@@ -48,6 +48,7 @@
     <Compile Include="HtmlDownloader.cs" />
     <Compile Include="HtmlOutputer.cs" />
     <Compile Include="HtmlParser.cs" />
+    <Compile Include="MailSender.cs" />
     <Compile Include="MimiSearcher.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

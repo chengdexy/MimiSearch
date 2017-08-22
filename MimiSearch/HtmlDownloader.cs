@@ -34,9 +34,9 @@ namespace MimiSearch
                 }
                 _wc.DownloadFile(url, path + Path.GetFileName(url));
             }
-            catch (Exception e)
+            catch (Exception)
             {
-                Debug.Print("[Error]"+e.Source + ": " + e.Message);
+                throw;
             }
         }
     }
