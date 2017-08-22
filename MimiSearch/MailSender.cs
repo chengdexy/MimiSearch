@@ -22,9 +22,11 @@ namespace MimiSearch
             msg.IsBodyHtml = IsHtml;
             msg.Priority = MailPriority.Normal;
 
-            SmtpClient client = new SmtpClient();
-            client.Credentials = new System.Net.NetworkCredential("xueyuanblog", "darkmoon1");
-            client.Host = "smtp.163.com";
+            SmtpClient client = new SmtpClient
+            {
+                Credentials = new System.Net.NetworkCredential("xueyuanblog", "darkmoon1"),
+                Host = "smtp.163.com"
+            };
             client.Send(msg);
         }
 

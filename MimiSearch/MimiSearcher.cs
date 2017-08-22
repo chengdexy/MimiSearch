@@ -85,8 +85,10 @@ namespace MimiSearch
         {
             SqlConnection cnn = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=MimiSearcher;User ID=sa;Password=darkmoon1");
             cnn.Open();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cnn;
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = cnn
+            };
             List<string> tmpList = new List<string>(tmpUrls);
             List<string> tmpList2 = new List<string>(tmpUrls);
             foreach (var url in tmpList2)

@@ -30,8 +30,10 @@ namespace MimiSearch
         {
             SqlConnection cnn = new SqlConnection(@"Data Source=.\SQLEXPRESS;Initial Catalog=MimiSearcher;User ID=sa;Password=darkmoon1");
             cnn.Open();
-            SqlCommand cmd = new SqlCommand();
-            cmd.Connection = cnn;
+            SqlCommand cmd = new SqlCommand
+            {
+                Connection = cnn
+            };
             foreach (var url in urls)
             {
                 string sqlStr = $"insert into Old_Item_Url(item_url) values ('{url}')";
