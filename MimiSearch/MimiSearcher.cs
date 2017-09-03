@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace MimiSearch
 {
@@ -72,6 +73,10 @@ namespace MimiSearch
             {
                 string html = HtmlDownloader.DownloadHtml(url);
                 string[] newUrls = HtmlParser.Parse(html, type);
+                for (int i = 0; i < newUrls.Length; i++)
+                {
+                    newUrls[i] = newUrls[i].Replace("amp;", "");
+                }
                 UrlManager.AddRange(newUrls, type);
             }
         }
