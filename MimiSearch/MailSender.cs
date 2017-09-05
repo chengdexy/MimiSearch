@@ -10,12 +10,12 @@ namespace MimiSearch
         public string BodyHtml { get; set; }
         public bool IsHtml { get; set; } = true;
 
-        public void Send()
+        public void Send(int imageCount)
         {
             MailMessage msg = new MailMessage();
             msg.To.Add(SendTo);
             msg.From = new MailAddress("xueyuanblog@163.com", "MimiSearcher", Encoding.UTF8);
-            msg.Subject = DateTime.Now.ToString("yyyy-MM-dd");
+            msg.Subject = DateTime.Now.ToString("yyyy-MM-dd")+$", {imageCount} images.";
             msg.SubjectEncoding = Encoding.UTF8;
             msg.Body = BodyHtml;
             msg.BodyEncoding = Encoding.UTF8;

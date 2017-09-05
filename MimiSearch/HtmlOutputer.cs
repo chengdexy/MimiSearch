@@ -60,13 +60,13 @@ namespace MimiSearch
 
             MailSender ms = new MailSender
             {
-                SendTo="hi@chengdexy.cn",
-                IsHtml=true,
+                SendTo = "hi@chengdexy.cn",
+                IsHtml = true,
                 BodyHtml = sb.ToString()
             };
             try
             {
-                ms.Send();
+                ms.Send(urls.Length);
             }
             catch (SmtpException)
             {
